@@ -40,5 +40,5 @@ Once the container is started, You have to create /dev/pts to be able to do a vz
 Bugs
 ====
 
-1. Some earlier versions of openwrt does not "mount" properly
+1. Some earlier versions of openwrt (such as 12.04 Attitude Adjustment) does not "mount" properly (see https://dev.openwrt.org/ticket/11618)
 2. Changing the passwd to have dropbear SSH does not work, still have to investigate why
