@@ -6,12 +6,16 @@ OpenWRT OpenVZ container
 Version
 =======
 
-Tested with r34054 of openwrt trunk for x86 arch.
+Tested with r34054 (fetched the 1st Nov 2012) of openwrt trunk for x86 arch.
 
 Installation
 ============
 
 You can copy the openwrt-x86-generic-rootfs.tar.gz in your /var/lib/vz/template/cache/ directory.
+
+A binary is available here:
+
+http://filez.zoobab.com/openwrt/openvz/x86/openwrt-x86-generic-rootfs.tar.gz
 
 And then use:
 
