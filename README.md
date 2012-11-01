@@ -8,6 +8,15 @@ Version
 
 Tested with r34054 of openwrt trunk for x86 arch.
 
+Installation
+============
+
+You can copy the openwrt-x86-generic-rootfs.tar.gz in your /var/lib/vz/template/cache/ directory.
+
+And then use:
+
+    * 23:23 root@trogir /home/zoobab# vzctl create 105 --ostemplate openwrt-x86-generic-rootfs
+
 Use
 ===
 
@@ -42,3 +51,18 @@ Bugs
 
 1. Some earlier versions of openwrt (such as 12.04 Attitude Adjustment) does not "mount" properly (see https://dev.openwrt.org/ticket/11618)
 2. Changing the passwd to have dropbear SSH does not work, still have to investigate why
+3. /etc/rc.common complains about accessing /proc/sys/kernel/core_pattern :
+
+    * 23:33 root@trogir /etc/vz/dists/scripts# vzctl restart 113
+    Restarting container
+    Stopping container ...
+    Container was stopped
+    Container is unmounted
+    Starting container ...
+    Container is mounted
+    Adding IP address(es): 192.168.20.113
+    /etc/rc.common: line 85: can't create /proc/sys/kernel/core_pattern: Permission denied
+    Setting CPU units: 1000
+    /etc/rc.common: line 85: can't create /proc/sys/kernel/core_pattern: Permission denied
+    Container start in progress...
+
