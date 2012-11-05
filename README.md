@@ -69,4 +69,15 @@ Bugs
     Setting CPU units: 1000
     /etc/rc.common: line 85: can't create /proc/sys/kernel/core_pattern: Permission denied
     Container start in progress...
+4. Some processes inside openwrt consumes 99% CPU when doing a vzctl stop:
 
+	root@trogir /home/zoobab [38]# vzctl restart 102
+	Restarting container
+	Stopping container ...
+	^C^C^C^C
+	Killing container ...
+
+   Two processes consumes all the ressources:
+
+    239463 root       20   0  1248   456   328 R 81.0  0.0  0:52.92 /bin/sh /etc/rc.common /etc/rc.d/K95luci_fixtime shutdown
+	239441 root       20   0   624   260   200 R 63.0  0.0  0:26.16 logger -s -p 6 -t sysinit
