@@ -7,22 +7,26 @@ Version
 =======
 
 Tested with r34054 (fetched the 1st Nov 2012) of openwrt trunk for x86 arch.
+Tested with r42625 of openwrt release Barrier Breaker 14.07 for x86 (32bits, 64bits has not been released yet) arch.
 
 Installation
 ============
 
-You can copy the openwrt-x86-generic-rootfs.tar.gz in your /var/lib/vz/template/cache/ directory.
+You can copy the openwrt-x86-generic-Generic-rootfs.tar.gz in your /var/lib/vz/template/cache/ directory.
 
 A binary is available here:
 
 http://filez.zoobab.com/openwrt/openvz/x86/openwrt-x86-generic-rootfs.tar.gz
+https://downloads.openwrt.org/barrier_breaker/14.07/x86/generic/openwrt-x86-generic-Generic-rootfs.tar.gz
 
 And then use:
 
-    * 23:23 root@trogir /home/zoobab# vzctl create 105 --ostemplate openwrt-x86-generic-rootfs
+    * 23:23 root@trogir /home/zoobab# vzctl create 105 --ostemplate openwrt-x86-generic-Generic-rootfs
 
 Use
 ===
+
+This pts bug has been fixed in the release "Barrier Breaker 14.07". So we keep it for historical reasons.
 
 Once the container is started, You have to create /dev/pts to be able to do a vzctl enter:
 
@@ -53,7 +57,7 @@ Once the container is started, You have to create /dev/pts to be able to do a vz
 Bugs
 ====
 
-1. Some earlier versions of openwrt (such as 12.04 Attitude Adjustment) does not "mount" properly (see https://dev.openwrt.org/ticket/11618)
+1. Some earlier versions of openwrt (such as 12.04 Attitude Adjustment) does not "mount" properly (see https://dev.openwrt.org/ticket/11618), this is fixed in the barrier breaker release.
 2. Changing the passwd to have dropbear SSH does not work, still have to investigate why
 3. /etc/rc.common complains about accessing /proc/sys/kernel/core_pattern :
 
@@ -71,13 +75,13 @@ Bugs
     Container start in progress...
 4. Some processes inside openwrt consumes 99% CPU when doing a vzctl stop:
 
-	root@trogir /home/zoobab [38]# vzctl restart 102
-	Restarting container
-	Stopping container ...
-	^C^C^C^C
-	Killing container ...
+    root@trogir /home/zoobab [38]# vzctl restart 102
+    Restarting container
+    Stopping container ...
+    ^C^C^C^C
+    Killing container ...
 
    Two processes consumes all the ressources:
 
     239463 root       20   0  1248   456   328 R 81.0  0.0  0:52.92 /bin/sh /etc/rc.common /etc/rc.d/K95luci_fixtime shutdown
-	239441 root       20   0   624   260   200 R 63.0  0.0  0:26.16 logger -s -p 6 -t sysinit
+    239441 root       20   0   624   260   200 R 63.0  0.0  0:26.16 logger -s -p 6 -t sysinit
