@@ -23,8 +23,39 @@ And then use:
 
 Use
 ===
+    # vzct enter 105
 
-This pts bug has been fixed in the release "Barrier Breaker 14.07". So we keep it for historical reasons.
+Todo
+====
+
+1. Some processes inside openwrt consumes 99% CPU when doing a vzctl stop?
+2. Disable useless services inside a container:
+    /etc/init.d/sysntpd disable
+
+Fixed
+=====
+
+1. Some earlier versions of openwrt (such as 12.04 Attitude Adjustment) does not "mount" properly (see https://dev.openwrt.org/ticket/11618), this is fixed in the barrier breaker release.
+2. /etc/rc.common complains about accessing /proc/sys/kernel/core_pattern :
+
+    * 23:33 root@trogir /etc/vz/dists/scripts# vzctl restart 113
+    Restarting container
+    Stopping container ...
+    Container was stopped
+    Container is unmounted
+    Starting container ...
+    Container is mounted
+    Adding IP address(es): 192.168.20.113
+    /etc/rc.common: line 85: can't create /proc/sys/kernel/core_pattern: Permission denied
+    Setting CPU units: 1000
+    /etc/rc.common: line 85: can't create /proc/sys/kernel/core_pattern: Permission denied
+    Container start in progress...
+
+To fix this issue, you need to comment this line in /etc/init.d/network:
+
+    init.d/network:#                echo '/tmp/%e.%p.%s.%t.core' > /proc/sys/kernel/core_pattern 
+
+3. This pts bug has been fixed in the release "Barrier Breaker 14.07".
 
 Once the container is started, You have to create /dev/pts to be able to do a vzctl enter:
 
@@ -51,31 +82,3 @@ Once the container is started, You have to create /dev/pts to be able to do a vz
       * 2 tsp. Creme de Cacao
      -----------------------------------------------------
     root@owrt3:/#
-
-Todo
-====
-
-1. Some processes inside openwrt consumes 99% CPU when doing a vzctl stop?
-
-Fixed
-=====
-
-1. Some earlier versions of openwrt (such as 12.04 Attitude Adjustment) does not "mount" properly (see https://dev.openwrt.org/ticket/11618), this is fixed in the barrier breaker release.
-2. /etc/rc.common complains about accessing /proc/sys/kernel/core_pattern :
-
-    * 23:33 root@trogir /etc/vz/dists/scripts# vzctl restart 113
-    Restarting container
-    Stopping container ...
-    Container was stopped
-    Container is unmounted
-    Starting container ...
-    Container is mounted
-    Adding IP address(es): 192.168.20.113
-    /etc/rc.common: line 85: can't create /proc/sys/kernel/core_pattern: Permission denied
-    Setting CPU units: 1000
-    /etc/rc.common: line 85: can't create /proc/sys/kernel/core_pattern: Permission denied
-    Container start in progress...
-
-To fix this issue, you need to comment this line in /etc/init.d/network:
-
-   init.d/network:#                echo '/tmp/%e.%p.%s.%t.core' > /proc/sys/kernel/core_pattern 
