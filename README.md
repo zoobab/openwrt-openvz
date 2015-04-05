@@ -58,7 +58,6 @@ Bugs
 ====
 
 1. Some earlier versions of openwrt (such as 12.04 Attitude Adjustment) does not "mount" properly (see https://dev.openwrt.org/ticket/11618), this is fixed in the barrier breaker release.
-2. Changing the passwd to have dropbear SSH does not work, still have to investigate why
 3. /etc/rc.common complains about accessing /proc/sys/kernel/core_pattern :
 
     * 23:33 root@trogir /etc/vz/dists/scripts# vzctl restart 113
@@ -73,6 +72,11 @@ Bugs
     Setting CPU units: 1000
     /etc/rc.common: line 85: can't create /proc/sys/kernel/core_pattern: Permission denied
     Container start in progress...
+
+To fix this issue, you need to comment this line in /etc/init.d/network:
+
+   init.d/network:#                echo '/tmp/%e.%p.%s.%t.core' > /proc/sys/kernel/core_pattern 
+
 4. Some processes inside openwrt consumes 99% CPU when doing a vzctl stop:
 
     root@trogir /home/zoobab [38]# vzctl restart 102
