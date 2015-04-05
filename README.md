@@ -6,7 +6,6 @@ OpenWRT OpenVZ container
 Version
 =======
 
-Tested with r34054 (fetched the 1st Nov 2012) of openwrt trunk for x86 arch.
 Tested with r42625 of openwrt release Barrier Breaker 14.07 for x86 (32bits, 64bits has not been released yet) arch.
 
 Installation
@@ -16,12 +15,11 @@ You can copy the openwrt-x86-generic-Generic-rootfs.tar.gz in your /var/lib/vz/t
 
 A binary is available here:
 
-http://filez.zoobab.com/openwrt/openvz/x86/openwrt-x86-generic-rootfs.tar.gz
 https://downloads.openwrt.org/barrier_breaker/14.07/x86/generic/openwrt-x86-generic-Generic-rootfs.tar.gz
 
 And then use:
 
-    * 23:23 root@trogir /home/zoobab# vzctl create 105 --ostemplate openwrt-x86-generic-Generic-rootfs
+    # vzctl create 105 --ostemplate openwrt-x86-generic-Generic-rootfs
 
 Use
 ===
@@ -54,11 +52,16 @@ Once the container is started, You have to create /dev/pts to be able to do a vz
      -----------------------------------------------------
     root@owrt3:/#
 
-Bugs
+Todo
 ====
 
+1. Some processes inside openwrt consumes 99% CPU when doing a vzctl stop?
+
+Fixed
+=====
+
 1. Some earlier versions of openwrt (such as 12.04 Attitude Adjustment) does not "mount" properly (see https://dev.openwrt.org/ticket/11618), this is fixed in the barrier breaker release.
-3. /etc/rc.common complains about accessing /proc/sys/kernel/core_pattern :
+2. /etc/rc.common complains about accessing /proc/sys/kernel/core_pattern :
 
     * 23:33 root@trogir /etc/vz/dists/scripts# vzctl restart 113
     Restarting container
@@ -76,16 +79,3 @@ Bugs
 To fix this issue, you need to comment this line in /etc/init.d/network:
 
    init.d/network:#                echo '/tmp/%e.%p.%s.%t.core' > /proc/sys/kernel/core_pattern 
-
-4. Some processes inside openwrt consumes 99% CPU when doing a vzctl stop:
-
-    root@trogir /home/zoobab [38]# vzctl restart 102
-    Restarting container
-    Stopping container ...
-    ^C^C^C^C
-    Killing container ...
-
-   Two processes consumes all the ressources:
-
-    239463 root       20   0  1248   456   328 R 81.0  0.0  0:52.92 /bin/sh /etc/rc.common /etc/rc.d/K95luci_fixtime shutdown
-    239441 root       20   0   624   260   200 R 63.0  0.0  0:26.16 logger -s -p 6 -t sysinit
